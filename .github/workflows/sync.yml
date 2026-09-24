@@ -1,0 +1,28 @@
+name: Sync with Fedora
+
+on:
+  schedule:
+    - cron: '17 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Regenerate spec
+        run: ./sync.sh
+      - name: Commit and push if changed
+        run: |
+          if git diff --quiet; then
+            echo "Already up to date"
+            exit 0
+          fi
+          version=$(awk '/^Version:/ { print $2; exit }' powerdevil.spec)
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -am "Sync powerdevil $version from Fedora $(cat fedora-branch)"
+          git push
