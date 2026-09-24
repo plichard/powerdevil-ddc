@@ -9,7 +9,7 @@ The change is `ddc-delay.patch`. Everything else is Fedora's own packaging.
 ## Install
 
 ```bash
-sudo dnf copr enable <fas-user>/powerdevil-ddc
+sudo dnf copr enable eagle2com/powerdevil-ddc
 sudo dnf upgrade --refresh powerdevil
 systemctl --user restart plasma-powerdevil
 ```
